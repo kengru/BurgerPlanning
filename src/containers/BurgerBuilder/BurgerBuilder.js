@@ -22,16 +22,18 @@ class BurgerBuilder extends Component {
   // }
 
   state = {
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    ingredients: null,
     totalPrice: 5,
     purchasable: false,
     ordering: false,
     loading: false
+  }
+
+  componentDidMount () {
+    axios.get('https://burgerplanning.firebaseio.com/ingredients.json')
+      .then(response => {
+        this.setState({ ingredients: response.data });
+      })
   }
 
   updatePurchaseState (ingredient) {
@@ -115,11 +117,27 @@ class BurgerBuilder extends Component {
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
-    let orderSummary = <OrderSummary 
-                          ingredients={this.state.ingredients}
-                          cancel={this.purchaseCancelHandler}
-                          continue={this.purchaseContinueHandler}
-                          price={this.state.totalPrice}/>;
+    
+    let orderSummary = null;
+    let burger = <Spinner/>
+    if (this.state.ingredients) {
+      burger = (
+        <>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls 
+            price={this.state.totalPrice}
+            disabled={disabledInfo}
+            purchasable={this.state.purchasable}
+            ordering={this.purchaseHandler}
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}/>
+        </>);
+      orderSummary = <OrderSummary 
+        ingredients={this.state.ingredients}
+        cancel={this.purchaseCancelHandler}
+        continue={this.purchaseContinueHandler}
+        price={this.state.totalPrice}/>;
+    }
     if ( this.state.loading ) {
       orderSummary = <Spinner/>
     }
@@ -131,14 +149,7 @@ class BurgerBuilder extends Component {
           modalClosed={this.purchaseCancelHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls 
-          price={this.state.totalPrice}
-          disabled={disabledInfo}
-          purchasable={this.state.purchasable}
-          ordering={this.purchaseHandler}
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}/>
+        {burger}
       </>
     );
   }
