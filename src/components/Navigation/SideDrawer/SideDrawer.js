@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import classes from './SideDrawer.css';
-import Logo from '../../Logo/Logo';
-import NavigationItems from '../NavigationItems/NavigationItems';
-import Backdrop from '../../UI/Backdrop/Backdrop';
+import classes from "./SideDrawer.css";
+import Logo from "../../Logo/Logo";
+import NavigationItems from "../NavigationItems/NavigationItems";
+import Backdrop from "../../UI/Backdrop/Backdrop";
 
-const sideDrawer = (props) => {
+const sideDrawer = props => {
   let attClasses = [classes.SideDrawer, classes.Close];
 
   if (props.open) {
@@ -14,13 +14,13 @@ const sideDrawer = (props) => {
 
   return (
     <>
-      <Backdrop show={props.open} clicked={props.closed}/>
-      <div className={attClasses.join(' ')}>
+      <Backdrop show={props.open} clicked={props.closed} />
+      <div className={attClasses.join(" ")}>
         <div className={classes.Logo}>
-          <Logo/>
+          <Logo />
         </div>
         <nav>
-          <NavigationItems/>
+          <NavigationItems />
         </nav>
       </div>
     </>
