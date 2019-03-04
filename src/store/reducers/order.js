@@ -30,6 +30,7 @@ const reducer = (state = initialState, action) => {
     default:
       break;
   }
+  return state;
 };
 
 export default reducer;
