@@ -11,8 +11,23 @@ configure({
 });
 
 describe("<NavigationItems />", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<NavigationItems />);
+  });
+
   it("should render two <NavigationItem /> element if not authenticated", () => {
-    const wrapper = shallow(<NavigationItems />);
     expect(wrapper.find(NavigationItem)).toHaveLength(2);
+  });
+
+  it("should render three <NavigationItem /> element if authenticated", () => {
+    wrapper.setProps({ isAuth: true });
+    expect(wrapper.find(NavigationItem)).toHaveLength(3);
+  });
+
+  it("should render a logout <NavigationItem /> if it's authenticated.", () => {
+    wrapper.setProps({ isAuth: true });
+    expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)).toEqual(true);
   });
 });
